@@ -3,3 +3,4 @@ client/node_modules
 client/.next
 .vscode
 common/node_modules
+tickets/node_modules
