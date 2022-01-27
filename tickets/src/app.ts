@@ -2,8 +2,9 @@ import express from 'express';
 import {json} from 'body-parser';
 import 'express-async-errors';
 import cookieSession from 'cookie-session';
+import { createTicketRouter } from './routes/new';
 
-import { errorHandler } from '@mh132001tickets/common';
+import { errorHandler, currentUser } from '@mh132001tickets/common';
 
 const app = express();
 app.set('trust proxy', true);
@@ -12,8 +13,20 @@ app.use(cookieSession({
     signed: false,
 }));
 
-// Using router
+app.use(currentUser);
 
+// Using router
+app.use(createTicketRouter);
+
+
+
+
+
+
+// 404 router
+app.all("*", (req, res) => {
+    return res.status(404).send({message: "Page not found!"});
+})
 
 // Error handler
 app.use(errorHandler);
