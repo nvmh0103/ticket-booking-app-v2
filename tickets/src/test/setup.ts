@@ -33,7 +33,7 @@ global.signin = () => {
     // fake a JWT payload.
     // then create JWT
     const payload = {
-        id: 'acsjjsc',
+        id: new mongoose.Types.ObjectId().toHexString(),
         email: 'test@test.com'
     }
     const token = jwt.sign(payload, process.env.JWT_KEY!);
