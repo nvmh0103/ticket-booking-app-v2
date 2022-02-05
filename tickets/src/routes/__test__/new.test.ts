@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket'
+import { natsWrapper } from '../../nat-wrapper'
 
 it('has a route listening to /api/tickets for posts', async () => {
     const response = await request(app)
@@ -77,4 +78,20 @@ it('success if provide valid title and price', async () => {
         .expect(201)
     tickets = await Ticket.find({});
     expect(tickets.length).toEqual(1);
+})
+
+it('publishes an evnet', async () => {
+    const title = 'something';
+
+    await request(app)
+        .post('/api/tickets')
+        .set('Cookie', global.signin())
+        .send({
+            title,
+            price: 20,
+        })
+        .expect(201)
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
+    
 })
