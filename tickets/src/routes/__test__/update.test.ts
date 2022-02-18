@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
+import { Ticket } from '../../models/ticket'
 
 
 
@@ -99,4 +100,29 @@ it('update ticket if provided paramaters is valid ', async () => {
     expect(ticketResponse.body.title).toEqual('another');
     expect(ticketResponse.body.price).toEqual(100);
     
+})
+
+it('rejects update if the ticket is reserved', async () => {
+    const cookie = global.signin();
+    const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+        title: 'something',
+        price: 20
+    });
+
+    const ticket = await Ticket.findOne({id: response.body.id});
+    ticket!.orderId = new mongoose.Types.ObjectId().toHexString();
+    await ticket!.save()
+
+    await request(app)
+        .put(`/api/tickets/${response.body.id}`)
+        .set('Cookie', cookie)
+        .send({
+            title: 'another',
+            price: 100
+        })
+        .expect(400)
+
 })

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { requireAuth, validateRequest, NotAuthorizedError,NotFoundError } from '@mh132001tickets/common';
+import { requireAuth, validateRequest, NotAuthorizedError,NotFoundError, BadRequestError } from '@mh132001tickets/common';
 import { Ticket } from '../models/ticket';
 import { natsWrapper } from '../nat-wrapper';
 import { TicketUpdatedPublisher} from '../events/publishers/ticket-updated-publisher'
@@ -21,6 +21,12 @@ router.put('/api/tickets/:id', requireAuth,
     if (!ticket){
         throw new NotFoundError();
     }
+
+    if (ticket.orderId){
+        throw new BadRequestError('Ticket has been reserved!');
+    }
+
+
     if (ticket.userId !== req.currentUser!.id){
         throw new NotAuthorizedError();
     }
