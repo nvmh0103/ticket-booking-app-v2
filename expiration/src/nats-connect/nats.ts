@@ -1,14 +1,8 @@
 import { natsWrapper } from '../nat-wrapper';
-import { TicketCreatedListener } from '../events/listener/ticket-created-listener';
-import { TicketUpdatedListener } from '../events/listener/ticket-updated-listener';
-import { ExpirationCompleteListener } from '../events/listener/expiration-complete-listener';
+import { OrderCreatedListener } from '../events/listeners/order-created-listener';
 
 if (!process.env.NATS_CLUSTER_ID){
     throw new Error('Missing JWT_KEY');
-}
-
-if (!process.env.NATS_CLIENT_ID){
-    throw new Error ('Missing NATS_CLIENT_ID');
 }
 
 if (!process.env.NATS_URL){
@@ -32,10 +26,8 @@ const natsConnect = async () => {
         process.on('SIGINT', () => natsWrapper.client.close());
         process.on('SIGTERM', () => natsWrapper.client.close());
 
-        
-        new TicketCreatedListener(natsWrapper.client).listen();
-        new TicketUpdatedListener(natsWrapper.client).listen();
-        new ExpirationCompleteListener(natsWrapper.client).listen();
+        new OrderCreatedListener(natsWrapper.client).listen();
+
     } catch (err){
         console.log(err);
     }
