@@ -1,5 +1,6 @@
 import { natsWrapper } from '../nat-wrapper';
-
+import { OrderCancelledListener } from '../event/listeners/order-cancelled-listener';
+import { OrderCreatedListener } from '../event/listeners/order-created-listener';
 
 if (!process.env.NATS_CLUSTER_ID){
     throw new Error('Missing JWT_KEY');
@@ -30,6 +31,8 @@ const natsConnect = async () => {
         process.on('SIGINT', () => natsWrapper.client.close());
         process.on('SIGTERM', () => natsWrapper.client.close());
 
+        new OrderCancelledListener(natsWrapper.client).listen();
+        new OrderCreatedListener(natsWrapper.client).listen();
         
     } catch (err){
         console.log(err);

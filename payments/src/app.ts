@@ -4,6 +4,7 @@ import 'express-async-errors';
 import cookieSession from 'cookie-session';
 
 import { errorHandler, currentUser } from '@mh132001tickets/common';
+import { createChargerRouter } from './routes/new';
 
 const app = express();
 app.set('trust proxy', true);
@@ -15,7 +16,7 @@ app.use(cookieSession({
 app.use(currentUser);
 
 // Using router
-
+app.use(createChargerRouter);
 
 
 // 404 router
