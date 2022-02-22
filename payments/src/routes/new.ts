@@ -2,6 +2,10 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { requireAuth, validateRequest, BadRequestError, NotFoundError, NotAuthorizedError, OrderStatus } from '@mh132001tickets/common';
 import { Order } from '../models/order';
+import { stripe } from '../stripe'
+import { Payment } from '../models/payment';
+import { PaymentCreatedPublisher } from '../event/publishers/payment-created-publisher'
+import { natsWrapper } from '../nat-wrapper'
 
 const router = express.Router();
 
@@ -31,7 +35,23 @@ async (req: Request, res: Response ) => {
         throw new BadRequestError('Order has been expired!');
     }
 
-    res.send({ success: true })
+    const payment = await stripe.charges.create({
+        currency: 'usd',
+        amount: order.price * 100,
+        source: token
+    })
+    const newPayment = Payment.build({
+        orderId,
+        stripeId: payment.id,
+    })
+    await newPayment.save();
+    new PaymentCreatedPublisher(natsWrapper.client).publish({
+        id: newPayment.id,
+        orderId: newPayment.orderId,
+        stripeId: newPayment.stripeId
+    });
+
+    res.status(201).send({ id: newPayment.id })
 })
 
 export { router as createChargerRouter }
