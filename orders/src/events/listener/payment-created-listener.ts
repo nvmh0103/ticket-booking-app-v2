@@ -9,9 +9,7 @@ export class PaymentCreatedListener extends Listener<PaymentCreatedEvent>{
     queueGroupName = queueGroupName;
 
     async onMessage(data: PaymentCreatedEvent['data'], msg: Message){
-        const order = await Order.findOne({
-            id: data.id,
-        })
+        const order = await Order.findOne({id: data.id});
         if (!order){
             throw new Error('Order not found!');
         }

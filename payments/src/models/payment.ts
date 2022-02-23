@@ -36,5 +36,5 @@ paymentSchema.statics.build = (attrs: PaymentAttrs) => {
     return new Payment(attrs);
 }
 
-const Payment = mongoose.model<PaymentDoc, PaymentModel>('Order', paymentSchema);
+const Payment = mongoose.model<PaymentDoc, PaymentModel>('Payment', paymentSchema);
 export { Payment }
