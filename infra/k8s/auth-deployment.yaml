@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: nvmh0103/auth
+          image: hoang.azurecr.io/nvmh0103/auth
           env:
             - name: MONGO_URI
               value: 'mongodb://mongo-srv:27017/tickets'

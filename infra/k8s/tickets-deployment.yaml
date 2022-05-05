@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: tickets
-          image: nvmh0103/tickets
+          image: hoang.azurecr.io/nvmh0103/tickets
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
