@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: payments
-          image: nvmh0103/payments
+          image: hoang.azurecr.io/nvmh0103/payments
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
