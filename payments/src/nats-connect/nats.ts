@@ -32,7 +32,7 @@ const natsConnect = async () => {
         process.on('SIGTERM', () => natsWrapper.client.close());
 
         new OrderCancelledListener(natsWrapper.client).listen();
-        new OrderCreatedListener(natsWrapper.client).listen();
+        // new OrderCreatedListener(natsWrapper.client).listen();
         
     } catch (err){
         console.log(err);

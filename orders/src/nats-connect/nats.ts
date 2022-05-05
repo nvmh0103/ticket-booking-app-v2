@@ -34,7 +34,7 @@ const natsConnect = async () => {
         process.on('SIGTERM', () => natsWrapper.client.close());
 
         
-        new TicketCreatedListener(natsWrapper.client).listen();
+        // new TicketCreatedListener(natsWrapper.client).listen();
         new TicketUpdatedListener(natsWrapper.client).listen();
         new ExpirationCompleteListener(natsWrapper.client).listen();
         new PaymentCreatedListener(natsWrapper.client).listen();
