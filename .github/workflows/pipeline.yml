@@ -61,6 +61,7 @@ jobs:
         docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
       working-directory: ./tickets
   deploy:
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
     - name: "Targeting AKS cluster"
