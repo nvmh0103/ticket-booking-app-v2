@@ -81,7 +81,7 @@ jobs:
     - name: " Listing current directory"
       run: |
         ls -la
-        cd auth
+        cd ${{ github.workspace }}
         ls -la
 
     # - name: "Deploying to AKS"
