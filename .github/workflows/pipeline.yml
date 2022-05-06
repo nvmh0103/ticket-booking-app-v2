@@ -81,10 +81,7 @@ jobs:
     - name: " Listing current directory"
       run: |
         cd ${{ github.workspace}}
-        echo "FOO=${ls}" >> $GITHUB_ENV
-    - name: " Get env"
-      run: |
-        echo "${{ env.FOO }}"
+        ls -la
 
     - name: "Deploying to AKS"
       uses: azure/k8s-deploy@v1
