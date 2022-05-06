@@ -1,10 +1,16 @@
-name: Docker Image CI
+name: Building containers and deploy to AKS
+
+env:
+  REGISTRY_NAME: hoang
+  CLUSTER_NAME: ticket-deployment
+  CLUSTER_RESOURCE_GROUP: ticket-microservices
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 
 jobs:
 
@@ -14,5 +20,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    
+    - uses: azure/docker-login@v1
+    - name: " Building auth "
+      with:
+        login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }} 
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/auth
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/auth
+      working-directory: ./auth
