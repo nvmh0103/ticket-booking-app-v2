@@ -77,7 +77,6 @@ jobs:
     - name: "Targeting AKS cluster"
       uses: azure/aks-set-context@v2.0
       with:
-        creds: '${{ secrets.AZURE_CREDENTIALS }}'
         cluster-name: ${{ env.CLUSTER_NAME }}
         resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
 
