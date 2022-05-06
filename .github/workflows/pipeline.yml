@@ -16,10 +16,10 @@ permissions:
       contents: read
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v3
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
     
   #   - name: " Login ACR "
   #     uses: azure/docker-login@v1
