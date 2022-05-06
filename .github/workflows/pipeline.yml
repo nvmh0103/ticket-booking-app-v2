@@ -30,3 +30,33 @@ jobs:
         docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/auth
         docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/auth
       working-directory: ./auth
+
+    - name: "Building client & push"
+      run: |
+        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/client
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/client
+      working-directory: ./client
+
+    - name: "Building expiration & push"
+      run: |
+        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/expiration
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/expiration
+      working-directory: ./expiration
+
+    - name: "Building orders & push"
+      run: |
+        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/orders
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/orders
+      working-directory: ./orders
+
+    - name: "Building payments & push"
+      run: |
+        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/payments
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/payments
+      working-directory: ./payments
+
+    - name: "Building tickets & push"
+      run: |
+        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
+      working-directory: ./tickets
