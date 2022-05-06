@@ -7,7 +7,6 @@ declare global{
     var signin: () => Promise<string[]>
 }
 
-
 let mongo: any;
 beforeAll(async () => {
     process.env.JWT_KEY= 'something';
