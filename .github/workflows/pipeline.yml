@@ -60,3 +60,34 @@ jobs:
         docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
         docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
       working-directory: ./tickets
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Targeting AKS cluster"
+      uses: azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        cluster-name: ${{ env.CLUSTER_NAME }}
+        resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
+
+    - name: "Deploying to AKS"
+      uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
+          ${{ github.workspace }}/infra/k8s/auth-deployment.yaml
+          ${{ github.workspace }}/infra/k8s/client-deployment.yaml
+          ${{ github.workspace }}/infra/k8s/expiration-deployment.yaml
+          ${{ github.workspace }}/infra/k8s/expiration-redis-deployment.yaml
+          ${{ github.workspace }}/infra/k8s/ingress-srv.yaml
+          ${{ github.workspace }}/infra/k8s/mongo.yaml
+          ${{ github.workspace }}/infra/k8s/nats-depl.yaml
+          ${{ github.workspace }}/infra/k8s/orders-deployment.yaml
+          ${{ github.workspace }}/infra/k8s/payments-deployment.yaml
+          ${{ github.workspace }}/infra/k8s/tickets-deployment.yaml
+        images: |
+          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/auth
+          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/client
+          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/expiration
+          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/orders
+          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/payments
+          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
