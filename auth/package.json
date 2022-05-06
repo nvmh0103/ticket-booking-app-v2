@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev --poll src/index.ts",
-    "test": "jest --detectOpenHandles --ci --forceExit"
+    "test": "jest --detectOpenHandles --forceExit"
   },
   "jest": {
     "preset": "ts-jest",

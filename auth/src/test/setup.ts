@@ -7,13 +7,16 @@ declare global{
     var signin: () => Promise<string[]>
 }
 
+
+
 let mongo: any;
 beforeAll(async () => {
     process.env.JWT_KEY= 'something';
     mongo = await MongoMemoryServer.create();
     const mongoUri = mongo.getUri();
     await mongoose.connect(mongoUri);
-})
+}, 20000)
+
 
 beforeEach(async () => {
     const collections = await mongoose.connection.db.collections();
@@ -25,7 +28,7 @@ beforeEach(async () => {
 afterAll (async () => {
     await mongo.stop();
     await mongoose.connection.close();
-})
+}, 100000)
 
 global.signin = async () => {
     const email = 'test@test.com';

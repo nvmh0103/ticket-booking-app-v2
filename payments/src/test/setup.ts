@@ -27,7 +27,7 @@ beforeEach(async () => {
 afterAll (async () => {
     await mongo.stop();
     await mongoose.connection.close();
-})
+},100000)
 
 global.signin = (id?: string) => {
     // fake a JWT payload.
