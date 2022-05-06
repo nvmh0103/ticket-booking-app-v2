@@ -16,53 +16,53 @@ permissions:
       contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
     
-    - name: " Login ACR "
-      uses: azure/docker-login@v1
-      with:
-        login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
-        username: ${{ secrets.REGISTRY_USERNAME }} 
-        password: ${{ secrets.REGISTRY_PASSWORD }}
+  #   - name: " Login ACR "
+  #     uses: azure/docker-login@v1
+  #     with:
+  #       login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
+  #       username: ${{ secrets.REGISTRY_USERNAME }} 
+  #       password: ${{ secrets.REGISTRY_PASSWORD }}
   
-    - name: "Building auth & push"
-      run: |
-        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/auth
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/auth
-      working-directory: ./auth
+  #   - name: "Building auth & push"
+  #     run: |
+  #       docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/auth
+  #       docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/auth
+  #     working-directory: ./auth
 
-    - name: "Building client & push"
-      run: |
-        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/client
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/client
-      working-directory: ./client
+  #   - name: "Building client & push"
+  #     run: |
+  #       docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/client
+  #       docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/client
+  #     working-directory: ./client
 
-    - name: "Building expiration & push"
-      run: |
-        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/expiration
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/expiration
-      working-directory: ./expiration
+  #   - name: "Building expiration & push"
+  #     run: |
+  #       docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/expiration
+  #       docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/expiration
+  #     working-directory: ./expiration
 
-    - name: "Building orders & push"
-      run: |
-        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/orders
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/orders
-      working-directory: ./orders
+  #   - name: "Building orders & push"
+  #     run: |
+  #       docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/orders
+  #       docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/orders
+  #     working-directory: ./orders
 
-    - name: "Building payments & push"
-      run: |
-        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/payments
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/payments
-      working-directory: ./payments
+  #   - name: "Building payments & push"
+  #     run: |
+  #       docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/payments
+  #       docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/payments
+  #     working-directory: ./payments
 
-    - name: "Building tickets & push"
-      run: |
-        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
-      working-directory: ./tickets
+  #   - name: "Building tickets & push"
+  #     run: |
+  #       docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
+  #       docker push ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
+  #     working-directory: ./tickets
   deploy:
     needs: [build]
     runs-on: ubuntu-latest
@@ -80,27 +80,26 @@ jobs:
     
     - name: " Listing current directory"
       run: |
-        cd ${{ github.workspace}}
         ls -la
 
-    - name: "Deploying to AKS"
-      uses: azure/k8s-deploy@v1
-      with:
-        manifests: |
-          ${{ github.workspace }}/infra/k8s/auth-deployment.yaml
-          ${{ github.workspace }}/infra/k8s/client-deployment.yaml
-          ${{ github.workspace }}/infra/k8s/expiration-deployment.yaml
-          ${{ github.workspace }}/infra/k8s/expiration-redis-deployment.yaml
-          ${{ github.workspace }}/infra/k8s/ingress-srv.yaml
-          ${{ github.workspace }}/infra/k8s/mongo.yaml
-          ${{ github.workspace }}/infra/k8s/nats-depl.yaml
-          ${{ github.workspace }}/infra/k8s/orders-deployment.yaml
-          ${{ github.workspace }}/infra/k8s/payments-deployment.yaml
-          ${{ github.workspace }}/infra/k8s/tickets-deployment.yaml
-        images: |
-          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/auth
-          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/client
-          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/expiration
-          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/orders
-          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/payments
-          ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
+    # - name: "Deploying to AKS"
+    #   uses: azure/k8s-deploy@v1
+    #   with:
+    #     manifests: |
+    #       ${{ github.workspace }}/infra/k8s/auth-deployment.yaml
+    #       ${{ github.workspace }}/infra/k8s/client-deployment.yaml
+    #       ${{ github.workspace }}/infra/k8s/expiration-deployment.yaml
+    #       ${{ github.workspace }}/infra/k8s/expiration-redis-deployment.yaml
+    #       ${{ github.workspace }}/infra/k8s/ingress-srv.yaml
+    #       ${{ github.workspace }}/infra/k8s/mongo.yaml
+    #       ${{ github.workspace }}/infra/k8s/nats-depl.yaml
+    #       ${{ github.workspace }}/infra/k8s/orders-deployment.yaml
+    #       ${{ github.workspace }}/infra/k8s/payments-deployment.yaml
+    #       ${{ github.workspace }}/infra/k8s/tickets-deployment.yaml
+    #     images: |
+    #       ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/auth
+    #       ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/client
+    #       ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/expiration
+    #       ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/orders
+    #       ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/payments
+    #       ${{ env.REGISTRY_NAME }}.azurecr.io/nvmh0103/tickets
