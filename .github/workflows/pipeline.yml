@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: "Targeting AKS cluster"
-      uses: azure/aks-set-context@v1
+      uses: azure/aks-set-context@v2.0
       with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
         cluster-name: ${{ env.CLUSTER_NAME }}
