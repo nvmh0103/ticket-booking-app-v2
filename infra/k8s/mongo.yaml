@@ -15,6 +15,13 @@ spec:
       containers:
         - name: mongo
           image: mongo:4.0
+        volumeMounts:
+        - mountPath: "/mnt/azure"
+          name: volume
+      volumes:
+        - name: volume
+          persistentVolumeClaim:
+            claimName: azure-managed-disk
 ---
 apiVersion: v1
 kind: Service
